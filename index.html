@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <title>JSON Song List</title>
+    <meta charset="utf-8" />
+</head>
+
+<body>
+
+    <p id="songs"></p>
+
+    <script>
+        const xmlhttp = new XMLHttpRequest();
+        var data = "";
+
+
+        xmlhttp.onload = function () {
+            data = JSON.parse(this.responseText);
+
+            let text = "";
+            for (let i in data.Songs) {
+                document.getElementById("songs").innerHTML += "Artist: " + data.Songs[i].Artist + "<br>";
+                document.getElementById("songs").innerHTML += "Title: " + data.Songs[i].Title + "<br>";
+                document.getElementById("songs").innerHTML += "Genre(s): " + data.Songs[i].Genres + "<br>";
+                document.getElementById("songs").innerHTML += "Released: " + data.Songs[i].Year + "<br>";
+                document.getElementById("songs").innerHTML += "<br>";
+            }
+        }
+
+
+        xmlhttp.open("GET", "https://adhi10.github.io/json_songs/songs.json", true);
+        xmlhttp.send();
+
+
+        function genreDisplay() {
+            sel = $('#gen :selected').text();
+            document.getElementById("genres").innerHTML = "";
+            document.getElementById("genres").innerHTML += "Selected Genre: " + sel + "<br>";
+            document.getElementById("genres").innerHTML += "<br>"
+            let text = "";
+            for (i = 0; i < data.Songs.length; i++) {
+                for (j = 0; j < data.Songs[i].Genres.length; j++) {
+                    if (data.Songs[i].Genres[j] == sel) {
+                        document.getElementById("genres").innerHTML += "Title: " + data.Songs[i].Title + "<br>";
+                        document.getElementById("genres").innerHTML += "Artist: " + data.Songs[i].Artist + "<br>";
+                        document.getElementById("genres").innerHTML += "Released: " + data.Songs[i].Year + "<br>";
+                        document.getElementById("genres").innerHTML += "<br>"
+                    }
+
+                }
+            }
+        }
+
+    </script>
+
+    <form>
+        <label for="filter">Pick a Genre</label>
+        <select name="genresDisplay" id="gen">
+            <option value="rap">Rap</option>
+            <option value="edm">EDM</option>
+            <option value="rock">Rock</option>
+        </select>
+        <br><br>
+        <input type="button" value="Filter" onclick="genreDisplay()">
+    </form>
+
+    <br>
+
+    <div id="genres"></div>
+
+</body>
+
+</html>
